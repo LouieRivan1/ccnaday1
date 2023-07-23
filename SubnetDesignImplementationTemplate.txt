@@ -1,0 +1,99 @@
+SubnetDesignImplementationTemplate:
+config t
+vlan __
+name _____.com
+exit
+Int vlan ___
+no shut
+ip add 10.0._._ 255.255._._
+ip dhcp excluded-add 10.0._._ 10.0._._
+ip dhcp pool _______.com
+network 10.0._._ 255.255._._
+default-router 10.0._._
+domain-name _____.com
+dns-server 10.m.1.10
+option 150 ip 10.m.100.8
+Int Fa 0/5
+swi acc vlan 25
+do sh ip dhcp binding
+
+
+
+
+config t
+vlan 25
+name TELUS.COM
+exit
+Int vlan 25
+no shut
+ip add 10.0.2.1 255.255.254.0
+ip dhcp excluded-add 10.0.2.1 10.0.2.100
+ip dhcp pooL TELUS.COM
+network 10.0.2.0 255.255.254.0
+default-router 10.0.2.1
+domain-name TELUS.COM
+dns-server 10.22.1.10
+option 150 ip 10.22.100.8
+Int Fa 0/5
+swi acc vlan 25
+do sh ip dhcp binding
+
+
+
+config t
+vlan 25
+name PNP.GOV.PH
+exit
+Int vlan 25
+no shut
+ip add 10.0.1.1 255.255.254.0
+ip dhcp excluded-add 10.0.1.1 10.0.1.50
+ip dhcp pool PNP.GOV.PH
+network 10.0.1.0 255.255.254.0
+default-router 10.0.1.1
+domain-name PNP.GOV.PH
+dns-server 10.22.1.10
+option 150 ip 10.22.100.8
+Int Fa 0/5
+swi acc vlan 25
+do sh ip dhcp binding
+
+config t
+vlan 25
+name ALORICA.COM
+exit
+Int vlan 25
+no shut
+ip add 10.0.1.1 255.255.254.0
+ip dhcp excluded-add 10.0.1.1 10.0.1.50
+ip dhcp pool ALORICA.COM
+network 10.0.1.0 255.255.254.0
+default-router 10.0.1.1
+domain-name PNP.GOV.PHALORICA.COM
+dns-server 10.22.1.10
+option 150 ip 10.22.100.8
+Int Fa 0/5
+swi acc vlan 25
+do sh ip dhcp binding
+
+
+
+SubnetDesignImplementationTemplate:
+config t
+vlan 25
+name ALORICA.COM
+exit
+Int vlan 25
+no shut
+ip add 10.0.32.1 255.255.254.0
+ip dhcp excluded-add 10.0.32.1 10.0.32.100
+ip dhcp pool ALORICA.COM
+network 10.0.32.0 255.255.254.0
+default-router 10.0.32.1
+domain-name ALORICA.COM
+dns-server 10.22.1.10
+option 150 ip 10.22.100.8
+Int Fa 0/5
+swi acc vlan 25
+do sh ip dhcp binding
+
