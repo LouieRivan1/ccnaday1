@@ -1,0 +1,225 @@
+romel@rivanschool.com
+
+
+
+
+
+
+
+delete flash:vlan.dat
+
+
+
+config t
+vlan 100
+exit
+int fa0/2 
+switchport mode access
+switchport access vlan 100
+
+
+802.1Q  -DTP - Dynmaic Trunking Protocol
+conf t
+ int range fa0/10 - 12
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+switchport trunk allowed vlan 1,100 (allowed)
+
+
+
+!!! trunk allow multiple vlans to connect
+
+
+
+Switch taas then switch baba
+conf t
+no spanning-tree vlan 1
+ no spanning-tree vlan 100
+
+
+conf t
+ spanning-tree vlan 1
+ spanning-tree vlan 100
+
+
+802.1D - STP (Spanning-Tree Protocol)
+-switch blinking fast 
+-broadcast storm
+-L2 loop
+
+
+
+
+Vlan 1
+Switch taas: 0817.350e.0280 (mac address) (bridge id)
+
+
+Switch baba: 0817.3510.e700 (mac address) (bridge id)
+
+
+Election of root bridge / boss of the switches
+1. Bridge Priority - 32768
+2. Lowest Mac address wins
+
+
+Vlan 100
+switch baba: 0817.3510.e700
+switch taas: 0817.350e.0280
+
+
+conf t
+ spanning-tree vlan 1 priority 8192
+
+
+conf t
+spanning-tree vlan 1 root primary
+
+
+Election of Root Port ( The lowest WIN)
+1. Port Priority 128
+2. Cost - Giga - 4, FE -19
+3. Port Number 
+
+
+802.1W - RSTP (Rapid-STP)
+
+Root Bridge
+conf t
+ spanning-tree mode rapid-pvst
+ spanning-tree backbonefast
+ interface range fa 0/1 - 8
+ switchport mode access
+ spanning-tree portfast
+
+
+Alalay/non-root
+conf t
+ spanning-tree mode rapid-pvst
+ spanning-tree uplinkfast
+ interface range fa 0/1 - 8
+ switchport mode access
+ spanning-tree portfast
+
+
+
+
+
+PORT SECURITY
+conf t
+ int fa0/1
+ switchport port-security
+ switchport port-security mac-address sticky
+ switchport port-security maximum 1
+ switchport port-security violation shutdown
+end
+
+sh
+
+
+shutdown -  pinaka malala block talaga
+protect - pinaka mabait
+restrict - same protect, send logs
+
+
+
+To return block port
+conf t 
+ int fa0/1
+shut
+no shut
+
+
+(test only) vlan to vlan
+conf t
+ int fa/04
+ switchport mode access
+ switchport access vlan 100
+
+
+
+ETHERCHANNEL CONFIG FOR BOTH SWITCHES
+conf t 
+ int range fa0/10-12
+ shut
+ channel-group 1 mode active
+ channel-protocol lacp
+ no shut
+int port-channel 1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+
+
+SW TAAS / SW BABA / EDGE
+erase startup-config
+
+
+
+Exercise
+Core and access
+conf t 
+ int range fa0/7-10
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+
+show interface trunk
+
+
+
+Core:
+conf t
+ int vlan 1
+ no shutdown
+ ip address 10.0.0.2 255.0.0.0
+
+ int fa0/12
+ no switchport 
+ ip address 200.0.0.1 255.255.255.0
+
+
+core1 - edge
+conf t
+hostname ISProuter
+int giga0/0/0
+ no shut
+ ip address 100.0.0.2 255.255.255.0
+int giga0/0/1
+ no shut
+ ip address 200.0.0.2 255.255.255.0
+int loopback 0
+ ip address 8.8.8.8 255.255.255.255
+ router eigrp 100
+ no auto-summary
+ network 100.0.0.0
+ network 200.0.0.0
+ network 8.8.8.8
+end 
+
+Core1
+conf t 
+ int vilan 1
+ shut
+
+
+HSRP (Hot Standby Routing Protocol)
+Core1/2
+conf t
+ int vlan 1
+ (core1) ip address 10.0.0.3 255.0.0.0
+ (both) standby 1 ip 10.0.0.1
+ (core1) standby 1 preempt
+ (core1) standby 1 priority 150
+ (core2) standby 1 priority 100
+
+conf t
+ int vlan 1
+standby 1 ip 10.0.0.1
+standby 1 priority 100
+ end
+
+
+conf t
+ int vlan 1
+ (both) standby 2 ip _.0.0.1
+ (core2) standby 2 preempt
+ (core2) standby 2 priority 150
+ (core1) standby 2 priority 100
